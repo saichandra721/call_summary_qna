@@ -1,0 +1,8 @@
+fastapi
+pydantic
+motor
+pymongo
+pdfplumber
+uvicorn
+scikit-learn
+sentence-transformers
