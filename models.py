@@ -3,7 +3,7 @@ from typing import List
 
 class SimilarQuestionResponse(BaseModel):
     similar_question_index:int
-    questions_count: str
+    questions_count: int
     questions: List[str]
 
 class QuestionAnswerResponse(BaseModel):
