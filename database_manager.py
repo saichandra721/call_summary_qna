@@ -2,16 +2,12 @@ from pymongo import MongoClient
 
 class MongoDBManager:
     def __init__(self, db_name="transcripts_db", collection_name="questions"):
-        self.client = MongoClient("mongodb://localhost:27017/")
+        self.client = MongoClient("mongodb+srv://admin:admin@cluster0.uvmcziq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 
-    def insert_question_answer(self, question, answer, rating):
-        self.collection.insert_one({
-            "question": question,
-            "answer": answer,
-            "rating": rating
-        })
+    def insert_question_answer(self, question_list):
+        self.collection.insert_many(question_list)        
 
     def get_top_questions(self, top_n=5):
         return list(self.collection.find().sort("rating", -1).limit(top_n))
