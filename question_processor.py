@@ -1,10 +1,13 @@
+import random
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from sentence_transformers import SentenceTransformer, util
+# from sentence_transformers import SentenceTransformer, util
 
 # Load pre-trained model
-model = SentenceTransformer('all-MiniLM-L6-v2')  # You can choose another model if needed
+# model = SentenceTransformer('all-MiniLM-L6-v2')  # You can choose another model if needed
+rating_choices = ["AVERAGE","GOOD","BEST"]
 def get_question_clusters(questions):
     # Step 2: Convert filtered strings to feature vectors using TfidfVectorizer
     vectorizer = TfidfVectorizer().fit_transform(questions)
@@ -38,21 +41,22 @@ def rate_answer(similarity, length_score):
     else:
         return "AVERAGE"
 def rate_answers(question, answers):
-    # Compute embeddings for the question and answers
-    question_embedding = model.encode(question, convert_to_tensor=True)
-    answer_embeddings = model.encode(answers, convert_to_tensor=True)
-
-    # Compute cosine similarity between the question and each answer
-    similarities = util.pytorch_cos_sim(question_embedding, answer_embeddings)
-
-    # Calculate length scores as a simple heuristic (optional)
-    max_len = max(len(answer.split()) for answer in answers)  # Find the max length for normalization
-    length_scores = [len(answer.split()) / max_len for answer in answers]
-    # Rate each answer and store results
+    # # Compute embeddings for the question and answers
+    # question_embedding = model.encode(question, convert_to_tensor=True)
+    # answer_embeddings = model.encode(answers, convert_to_tensor=True)
+    #
+    # # Compute cosine similarity between the question and each answer
+    # similarities = util.pytorch_cos_sim(question_embedding, answer_embeddings)
+    #
+    # # Calculate length scores as a simple heuristic (optional)
+    # max_len = max(len(answer.split()) for answer in answers)  # Find the max length for normalization
+    # length_scores = [len(answer.split()) / max_len for answer in answers]
+    # # Rate each answer and store results
     ratings = []
-    for i, similarity in enumerate(similarities[0]):
-        rating = rate_answer(similarity.item(), length_scores[i])
-        ratings.append(rating)
+    # for i, similarity in enumerate(similarities[0]):
+        # rating = rate_answer(similarity.item(), length_scores[i])
+    for _ in answers:
+        ratings.append(random.choice(rating_choices))
     return ratings
 
 
