@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List
 
 class SimilarQuestionResponse(BaseModel):
-    similar_question_index:str
+    similar_question_index:int
     questions_count: str
     questions: List[str]
 
