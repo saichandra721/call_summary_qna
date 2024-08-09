@@ -5,4 +5,4 @@ pymongo
 pdfplumber
 uvicorn
 scikit-learn
-sentence-transformers
+sentence_transformers
