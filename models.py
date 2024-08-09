@@ -9,6 +9,6 @@ class SimilarQuestionResponse(BaseModel):
 class QuestionAnswerResponse(BaseModel):
     id: str
     question: str
-    answer: List[str]
+    answer: str
     rating: str
 
