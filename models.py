@@ -1,17 +1,14 @@
 from pydantic import BaseModel
 from typing import List
 
-class QuestionAnswer(BaseModel):
-    question: str
-    answer: List[str]
-    rating: str
+class SimilarQuestionResponse(BaseModel):
+    similar_question_index:str
+    questions_count: str
+    questions: List[str]
 
-class QuestionResponse(BaseModel):
+class QuestionAnswerResponse(BaseModel):
     id: str
     question: str
     answer: List[str]
     rating: str
 
-class SimilarQuestionResponse(BaseModel):
-    question: str
-    similar_questions: List[str]

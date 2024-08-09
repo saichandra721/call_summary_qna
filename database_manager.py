@@ -10,7 +10,7 @@ class MongoDBManager:
         self.collection.insert_many(question_list)        
 
     def get_top_questions(self, top_n=5):
-        return list(self.collection.find().sort("rating", -1).limit(top_n))
+        return list(self.collection.find().limit(top_n))
 
     def get_all_questions(self):
         return list(self.collection.find())

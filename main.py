@@ -7,14 +7,14 @@ from pdf_extractor import extract_text_from_pdf, extract_seller_from_transcript,
     parse_transcript, get_questions
 from question_processor import get_question_clusters, rate_answers
 from database_manager import MongoDBManager
-from models import QuestionAnswer, QuestionResponse, SimilarQuestionResponse
+from models import SimilarQuestionResponse, QuestionAnswerResponse
 from bson import ObjectId
 
 app = FastAPI()
 
 db_manager = MongoDBManager()
 
-@app.post("/process_pdfs/")
+@app.post("/process_pdfs/",  response_model=List[SimilarQuestionResponse])
 def process_pdfs(limit:int = 10):
     print("Entered process pdfs")
     all_questions_dict = {}
@@ -63,29 +63,16 @@ def process_pdfs(limit:int = 10):
     # db_manager.insert_question_answer(top_5[:5])
     return similar_questions[:limit]
 
-@app.get("/top_questions/", response_model=List[QuestionResponse])
+@app.get("/top5_questions/", response_model=List[QuestionAnswerResponse])
 def get_top_questions():
-    questions = db_manager.get_top_questions()
-    return [{"id": str(q["_id"]), "question": q["question"], "answer": q["answer"], "rating": q["rating"]} for q in
-            questions]
-
-
-
-@app.delete("/questions/{question_id}/")
-def delete_question(question_id: str):
-    result = db_manager.delete_question(ObjectId(question_id))
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="Question not found")
-    return {"message": "Question deleted successfully"}
-
-
-@app.delete("/questions/")
-def delete_all_questions():
-    db_manager.delete_all_questions()
-    return {"message": "All questions deleted successfully"}
-
-@app.get("/allquestions/")
-def get_all_questions_man():
-    questions = db_manager.get_all_questions()
-    return [{"id": str(q["_id"]), "similar_question": q["questions_and_answers"]} for q in
-            questions]
+    questions_and_answers = db_manager.get_top_questions()
+    response = [
+        {
+            "id": str(qna["_id"]),
+            "question": qna["question"],
+            "answer": qna["answer"],
+            "rating": qna["rating"]
+        }
+        for qna in questions_and_answers
+    ]
+    return response
