@@ -41,6 +41,9 @@ def rate_answer(similarity, length_score):
     else:
         return "AVERAGE"
 def rate_answers(question, answers):
+    """
+    Commented ML code due to Memory issue
+    """
     # # Compute embeddings for the question and answers
     # question_embedding = model.encode(question, convert_to_tensor=True)
     # answer_embeddings = model.encode(answers, convert_to_tensor=True)

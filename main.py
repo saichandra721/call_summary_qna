@@ -1,14 +1,12 @@
 import os
 from typing import List
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 
-from pdf_extractor import extract_text_from_pdf, extract_seller_from_transcript, extract_questions_by_speaker, \
-    parse_transcript, get_questions
+from pdf_extractor import extract_text_from_pdf, parse_transcript, get_questions
 from question_processor import get_question_clusters, rate_answers
 from database_manager import MongoDBManager
 from models import SimilarQuestionResponse, QuestionAnswerResponse
-from bson import ObjectId
 
 app = FastAPI()
 
@@ -60,7 +58,7 @@ def process_pdfs(limit:int = 10):
                 elif rating=="AVERAGE" and len(top_5_average_questions)<5:
                     top_5_average_questions.append(qna)
     top_5 = top_5_best_questions+top_5_good_questions+top_5_average_questions
-    # db_manager.insert_question_answer(top_5[:5])
+    db_manager.insert_question_answer(top_5[:5])
     return similar_questions[:limit]
 
 @app.get("/top5_questions/", response_model=List[QuestionAnswerResponse])
